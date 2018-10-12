@@ -301,7 +301,7 @@ class PatchCreator {
 
 		$zipfile = new zipfile();
 	
-		$zipfile->add_file(file_get_contents($this->patch_xml_file), 'patch.xml');
+		$zipfile->add_file(file_get_contents_via_curl($this->patch_xml_file), 'patch.xml');
 
 		if (is_array($this->patch_info_array["files"]))
 		{
@@ -310,7 +310,7 @@ class PatchCreator {
 				if ($file_info["upload_tmp_name"] <> '')
 				{
 					$file_name = preg_replace('/.php$/', '.new', $file_info['file_name']);
-					$zipfile->add_file(file_get_contents($file_info['upload_tmp_name']), $file_name);
+					$zipfile->add_file(file_get_contents_via_curl($file_info['upload_tmp_name']), $file_name);
 				}
 			}
 		}

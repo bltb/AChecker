@@ -490,7 +490,7 @@ class Patch {
 		$local_file = $folder.$file;
 
 		// if svn script does not exist, consider the script is modified
-		if (!file_get_contents($svn_file)) return true;
+		if (!file_get_contents_via_curl($svn_file)) return true;
 
 		// check if the local file has been modified by user. if it is, don't overwrite
 		if ($this->compareFiles($svn_file, $local_file) <> 0 && $this->patchesFilesDAO->getNumOfUpdatesOnFile($file) == 0)
@@ -586,7 +586,7 @@ class Patch {
 			$this->backup_files[] = realpath($backup_file);
 		}
 		
-		$local_file_content = file_get_contents($local_file);
+		$local_file_content = file_get_contents_via_curl($local_file);
 
 		// Modify user's file
 		foreach ($this->patch_array['files'][$row_num]['action_detail'] as $garbage => $alter_file_action)
@@ -664,7 +664,7 @@ class Patch {
 	*/
 	function copyFile($src, $dest)
 	{
-		$content = file_get_contents($src);
+		$content = file_get_contents_via_curl($src);
 		$fp = fopen($dest, 'w');
 		fwrite($fp, $content);
 		fclose($fp);
@@ -688,8 +688,8 @@ class Patch {
 		// These lines are created by SVN. It could be different in different copies of the same file.
 		$pattern = '/\/\/ \$Id.*\$|\$lm = \'\$LastChangedDate.*;/';
 		
-		$src_content = preg_replace($pattern, '', file_get_contents($src));
-		$dest_content = preg_replace($pattern, '', file_get_contents($dest));
+		$src_content = preg_replace($pattern, '', file_get_contents_via_curl($src));
+		$dest_content = preg_replace($pattern, '', file_get_contents_via_curl($dest));
 
 		return strcasecmp($src_content, $dest_content);
 	}

@@ -71,7 +71,7 @@ class Utility {
 				if (substr($uri, 0, strlen($prefix)) <> $prefix)
 				{
 					$prefixed_uri = $prefix.$uri;
-					$connection = @file_get_contents($prefixed_uri);
+					$connection = file_get_contents_via_curl($prefixed_uri);
 					
 					if (!$connection)
 					{
@@ -86,7 +86,7 @@ class Utility {
 		}
 		else
 		{
-			$connection = @file_get_contents($uri);
+			$connection = file_get_contents_via_curl($uri);
 			
 			if ($connection) return $uri;
 			else return $uri;

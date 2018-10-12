@@ -84,7 +84,7 @@ else $who = "public";
 // check the connection to server update.atutor.ca
 $update_server = "http://update.atutor.ca"; 
 $connection_test_file = $update_server . '/index.php';
-$connection = @file_get_contents($connection_test_file);
+$connection = file_get_contents_via_curl($connection_test_file);
 
 if (!$connection) 
 {
@@ -99,7 +99,7 @@ else
 if ($server_connected)
 {
 	$patch_folder = $update_server . '/achecker/patch/' . str_replace('.', '_', VERSION) . '/';
-	$patch_list_xml = @file_get_contents($patch_folder . 'patch_list.xml');
+	$patch_list_xml = file_get_contents_via_curl($patch_folder . 'patch_list.xml');
 	
 	if ($patch_list_xml) 
 	{
@@ -160,7 +160,7 @@ if ($_POST['install'] || $_POST['install_upload'] && !isset($_POST["not_ignore_v
 			$patchURL = $module_content_folder . "/";
 		}
 			
-		$patch_xml = @file_get_contents($patchURL . 'patch.xml');
+		$patch_xml = file_get_contents_via_curl($patchURL . 'patch.xml');
 		
 		if ($patch_xml === FALSE) 
 		{

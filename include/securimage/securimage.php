@@ -3501,7 +3501,7 @@ class Securimage
      */
     protected function audioError()
     {
-        return @file_get_contents(dirname(__FILE__) . '/audio/en/error.wav');
+        return file_get_contents_via_curl(dirname(__FILE__) . '/audio/en/error.wav');
     }
 
     /**

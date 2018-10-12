@@ -92,7 +92,7 @@ class HTMLValidator {
 			return $pageOutput;
 		}
 		else
-			return file_get_contents($this->validator_url. "?uri=".$uri);
+			return file_get_contents_via_curl($this->validator_url. "?uri=".$uri);
 	}
 	
 	/**

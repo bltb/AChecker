@@ -289,7 +289,7 @@ class LanguageManager {
 
 		global $languageManager, $msg;
 
-		$language_xml = @file_get_contents($import_path.'language.xml');
+		$language_xml = file_get_contents_via_curl($import_path.'language.xml');
 
 		$languageParser = new LanguageParser();
 		$languageParser->parse($language_xml);

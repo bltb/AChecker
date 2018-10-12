@@ -27,10 +27,10 @@ class RemoteLanguageManager extends LanguageManager {
 
 	function __construct() {
 		$version = str_replace('.','_',VERSION);
-		$language_xml = @file_get_contents('http://update.atutor.ca/languages/'.$version.'/languages.xml');
+		$language_xml = file_get_contents_via_curl('http://update.atutor.ca/languages/'.$version.'/languages.xml');
 		if ($language_xml === FALSE) {
 			// fix for bug #2896
-			$language_xml = @file_get_contents('http://update.atutor.ca/languages/1_5_3/languages.xml');
+			$language_xml = file_get_contents_via_curl('http://update.atutor.ca/languages/1_5_3/languages.xml');
 		}
 		if ($language_xml !== FALSE) {
 
@@ -54,7 +54,7 @@ class RemoteLanguageManager extends LanguageManager {
 	function fetchLanguage($language_code, $filename) {
 		$version = str_replace('.','_',VERSION);
 
-		$language_pack = @file_get_contents('http://update.atutor.ca/languages/' . $version . '/atutor_' . $version . '_' . $language_code . '.zip');
+		$language_pack = file_get_contents_via_curl('http://update.atutor.ca/languages/' . $version . '/atutor_' . $version . '_' . $language_code . '.zip');
 
 		if ($language_pack) {
 			$fp = fopen($filename, 'wb+');

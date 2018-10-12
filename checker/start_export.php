@@ -46,7 +46,7 @@ if (isset($_POST['file']) && isset($_POST['problem'])) {
 $uri = '';
 if (isset($_SESSION['input_form']['uri'])) {
 	$uri = $_SESSION['input_form']['uri'];
-	$validate_content = @file_get_contents($uri);
+	$validate_content = file_get_contents_via_curl($uri);
 	$input_content_type = $uri;
 }
 

@@ -103,7 +103,7 @@ class zipfile {
 
 			} else {
 				/* add this file to the zip */
-				$this-> add_file( file_get_contents($dir . $pre_pend_dir . $file),
+				$this-> add_file( file_get_contents_via_curl($dir . $pre_pend_dir . $file),
 								  $zip_prefix_dir . $pre_pend_dir . $file,
 								  $file_info['mtime'] );
 			}
