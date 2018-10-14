@@ -41,7 +41,10 @@ $output = trim(strtolower($_REQUEST['output']));
 $offset = intval($_REQUEST['offset']);
 
 // initialize defaults for the ones not set or not set right but with default values
-if ($output <> 'html' && $output <> 'rest') {
+if ($output <> 'html' 
+&& $output <> 'rest'
+&& $output <> 'csv'
+) {
 	$output = DEFAULT_WEB_SERVICE_OUTPUT;
 }
 // end of initialization
@@ -76,6 +79,9 @@ if (is_array($errors))
 	if ($output == 'rest') {
 		header('Content-type: text/xml');
 		echo RESTWebServiceOutput::generateErrorRpt($errors);
+	} elseif ($output == 'csv') {
+		echo "XXX. CSV. Not implemented."
+		echo HTMLRpt::generateErrorRpt($errors);
 	} else {
 		echo HTMLRpt::generateErrorRpt($errors);
 	}
@@ -131,6 +137,16 @@ if (isset($validate_content))
 		$restWebServiceOutput = new RESTWebServiceOutput($errors, $user_link_id, $gids);
 		header('Content-type: text/xml');
 		echo $restWebServiceOutput->getWebServiceOutput();
+	}
+
+	if ($output == 'csv')
+	{
+		$csvWebServiceOutput = new CSVWebServiceOutput($errors, $user_link_id, $gids);
+		header('Content-type: text/csv');
+		print "standards,id";
+		print "XXX. Not implemented.,Work in progress.";
+		print "Z 1.1,78";
+		// echo $csvWebServiceOutput->getWebServiceOutput();
 	}
 }
 
