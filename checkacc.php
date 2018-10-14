@@ -41,8 +41,9 @@ $output = trim(strtolower($_REQUEST['output']));
 $offset = intval($_REQUEST['offset']);
 
 // initialize defaults for the ones not set or not set right but with default values
-if ($output <> 'html' && $output <> 'rest') 
+if ($output <> 'html' && $output <> 'rest') {
 	$output = DEFAULT_WEB_SERVICE_OUTPUT;
+}
 // end of initialization
 
 // validate parameters
