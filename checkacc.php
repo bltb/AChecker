@@ -42,9 +42,10 @@ $offset = intval($_REQUEST['offset']);
 
 // initialize defaults for the ones not set or not set right but with default values
 if ($output <> 'html' 
-&& $output <> 'rest'
-&& $output <> 'csv'
-) {
+	&& $output <> 'rest'
+	&& $output <> 'csv'
+)
+{
 	$output = DEFAULT_WEB_SERVICE_OUTPUT;
 }
 // end of initialization
