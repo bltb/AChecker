@@ -233,6 +233,13 @@ class acheckerCSV {
 			if ($problem_type == 'known') {
 				$file_content .= _AC("file_repair").DELIM._AC("file_problem").DELIM._AC("file_css").DELIM._AC("file_img").EOL;
 				foreach ($array as $error) {
+
+
+$debug_error = "XXX. does this error variable have a groupid?";
+					debug_to_log($debug_error);
+					debug_to_log($error);
+
+
 					// line and column + error text
 					$file_content .= $error['line_text'].' '.$error['line_nr'].', '.$error['col_text'].' '.$error['col_nr']
 						.': '.$this->prepareStr(strip_tags($error['error'])).EOL;

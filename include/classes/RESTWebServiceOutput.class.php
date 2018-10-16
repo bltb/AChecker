@@ -135,7 +135,19 @@ class RESTWebServiceOutput {
 
 	/**
 	* private
-	* main process to generate report in html format
+	* main process to generate report
+* XXX. FIXME. this seems *so* different to the other report code
+* this looks like a bit like generateChecksTable()
+
+                $named_groups = $this->guidelineGroupsDAO->getNamedGroupsByGuidelineID($this->gid);
+                        foreach ($named_groups as $group)
+                                $named_subgroups = $this->guidelineSubgroupsDAO->getNamedSubgroupByGroupID($group['group_id']);
+                                        foreach ($named_subgroups as $subgroup)
+                                                $subgroup_checks = $this->checksDAO->getChecksBySubgroupID($subgroup['subgroup_id']);
+
+  'subgroupID' => '239',
+
+
 	*/
 	private function generateRESTRpt()
 	{
@@ -156,6 +168,8 @@ class RESTWebServiceOutput {
 			$decision_made = '';
 
 			$row_check = $checksDAO->getCheckByID($error["check_id"]);
+
+debug_to_log($row_check);
 
 			if ($row_check["confidence"] == KNOWN)
 			{ // only known errors have <repair>
