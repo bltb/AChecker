@@ -529,5 +529,12 @@ class AccessibilityValidator {
 	
 		return $rtn;
 	}
+
+	public function getUri()
+	{
+		return $this->uri;
+	}
+
 }
 ?>
+
