@@ -33,6 +33,7 @@ include_once(AC_INCLUDE_PATH. 'classes/DAO/UserLinksDAO.class.php');
 include_once(AC_INCLUDE_PATH. 'classes/AccessibilityValidator.class.php');
 include_once(AC_INCLUDE_PATH. 'classes/HTMLWebServiceOutput.class.php');
 include_once(AC_INCLUDE_PATH. 'classes/RESTWebServiceOutput.class.php');
+include_once(AC_INCLUDE_PATH. 'classes/CSVWebServiceOutput.class.php');
 
 $uri = trim(urldecode($_REQUEST['uri']));
 $web_service_id = trim($_REQUEST['id']);
@@ -81,7 +82,7 @@ if (is_array($errors))
 		header('Content-type: text/xml');
 		echo RESTWebServiceOutput::generateErrorRpt($errors);
 	} elseif ($output == 'csv') {
-		echo "XXX. CSV. Not implemented."
+		echo "XXX. CSV. Not implemented.";
 		echo HTMLRpt::generateErrorRpt($errors);
 	} else {
 		echo HTMLRpt::generateErrorRpt($errors);
@@ -142,12 +143,11 @@ if (isset($validate_content))
 
 	if ($output == 'csv')
 	{
-		$csvWebServiceOutput = new CSVWebServiceOutput($errors, $user_link_id, $gids);
+		$csvWebServiceOutput = new CSVWebServiceOutput($aValidator, $user_link_id, $gids);
+		$filename = "achecker.csv";
 		header('Content-type: text/csv');
-		print "standards,id";
-		print "XXX. Not implemented.,Work in progress.";
-		print "Z 1.1,78";
-		// echo $csvWebServiceOutput->getWebServiceOutput();
+		header('Content-Disposition: filename="' . $filename . '"');
+		echo $csvWebServiceOutput->getWebServiceOutput();
 	}
 }
 

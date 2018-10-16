@@ -42,6 +42,10 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
 	var $guidelineGroupsDAO;
 	var $guidelineSubgroupsDAO;
 
+        // FIXME. HACK
+        var $uri = "";
+        var $csv_data = "";
+
 	var $html_group =
 '<h3>{GROUP_NAME}</h3><br/>
 ';
@@ -221,8 +225,8 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
 						if (is_array($subgroup_checks))
 						{
 							// get html of all the problems in this subgroup
-							list($known_problems, $likely_problems, $potential_problems) =
-								$this->generateChecksTable($subgroup_checks);
+                                                        list($known_problems, $likely_problems, $potential_problems) = 
+                                                                $this->generateChecksTable($subgroup_checks, $group, $subgroup);
 
 							$subgroup_title = str_replace("{SUBGROUP_NAME}", _AC($subgroup['name']), $this->html_subgroup);
 
@@ -329,7 +333,9 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
 				                                   _AC("fail"), _AC($row['decision_fail'])),
 				                             $this->html_question);
 			}
-			$html_table_rows_for_one_check = $this->get_table_rows_for_one_check($this->errors_by_checks[$check_id], $check_id, $row["confidence"]);
+
+                        // XXX. HACK
+                        $html_table_rows_for_one_check = $this->get_table_rows_for_one_check($this->errors_by_checks[$check_id], $check_id, $row["confidence"], $row, $group, $subgroup);
 
 			if (($row["confidence"] == LIKELY || $row["confidence"] == POTENTIAL) && $this->allow_set_decision == 'true') {
 				$html_make_decision_button = str_replace(array("{LABEL_MAKE_DECISION}", "{SUBGROUP_ID}"),
@@ -377,7 +383,7 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
 	* $confidence: KNOWN, LIKELY, POTENTIAL  @ see include/constants.inc.php
 	* @return html table rows
 	*/
-	private function get_table_rows_for_one_check($errors_for_this_check, $check_id, $confidence)
+        private function get_table_rows_for_one_check($errors_for_this_check, $check_id, $confidence, $check_row, $group, $subgroup)
 	{
 		if (!is_array($errors_for_this_check)) {  // no problem found for this check
 			return '';
@@ -483,6 +489,20 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
 		                         AC_BASE_HREF,
 		                         $html_image),
 		                   $this->html_problem);
+
+
+                        $group_name     = _AC($group['name']);
+                        $subgroup_name  = _AC($subgroup['name']);
+                        $ac_err         = str_replace('"', '""', _AC($check_row["err"]));
+ 
+                        $sequence_id = $error['line_number'].'_'.$error['col_number'].'_'.$error['check_id'];
+                        $uri = $this->uri;
+ 
+                        # FIXME. escape quotes
+                        $csv_line = "$uri,$sequence_id,$check_id,\"$ac_err\",\"$group_name\",\"$subgroup_name\",\"$group_name / $subgroup_name\",$confidence,${error['line_number']},${error['col_number']},\"" . htmlentities($error["html_code"], ENT_COMPAT, 'UTF-8') . '"';
+                        $this->csv_data .= $csv_line . "\n";
+
+
 		    // compose all <tr> rows
 		    // checkboxes only appear
 		    // 1. when user is login. In other words, user can make decision.
@@ -608,6 +628,16 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
 '<div id="success">Success</div>';
 
 		return $html_success;
+	}
+        public function setUri($uri)
+        {
+                $this->uri = $uri;
+        }
+
+        public function getCsvData()
+        {
+                $csv = "url,sequenceID,check_id,errorMsg,group,subgroup,standards,confidence,lineNum,columnNum,errorSourceCode\n" . $this->csv_data;
+                return $csv;
 	}
 }
 ?>
