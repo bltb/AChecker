@@ -295,7 +295,7 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
 	 * @param $checks_array
 	 * @return an array of htmls of (known_problem, likely_problems, potential_problems)
 	 */
-	private function generateChecksTable($checks_array)
+        private function generateChecksTable($checks_array, $group = NULL, $subgroup = NULL)
 	{
 		if (!is_array($checks_array)) return NULL;
 
