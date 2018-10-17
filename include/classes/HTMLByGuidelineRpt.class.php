@@ -42,9 +42,9 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
 	var $guidelineGroupsDAO;
 	var $guidelineSubgroupsDAO;
 
-        // FIXME. HACK
-        var $uri = "";
-        var $csv_data = "";
+	// FIXME. HACK
+	var $uri = "";
+	var $csv_data = "";
 
 	var $html_group =
 '<h3>{GROUP_NAME}</h3><br/>
@@ -498,9 +498,19 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
                         $sequence_id = $error['line_number'].'_'.$error['col_number'].'_'.$error['check_id'];
                         $uri = $this->uri;
  
-                        # FIXME. escape quotes
-                        $csv_line = "$uri,$sequence_id,$check_id,\"$ac_err\",\"$group_name\",\"$subgroup_name\",\"$group_name / $subgroup_name\",$confidence,${error['line_number']},${error['col_number']},\"" . htmlentities($error["html_code"], ENT_COMPAT, 'UTF-8') . '"';
-                        $this->csv_data .= $csv_line . "\n";
+# LF             =  %x0A
+# CR             =  %x0D
+# COMMA = %x2C
+# XXX
+# FIXME. escape comma, cr, lf
+			$html_code = htmlentities($error["html_code"], ENT_COMPAT, 'UTF-8');
+			$html_code = str_replace(
+						array("\n", "\r", ","),
+						array("%x0A", "%x0D", "%x2C"),
+							$html_code);
+
+			$csv_line = "$uri,$sequence_id,$check_id,\"$ac_err\",\"$group_name\",\"$subgroup_name\",\"$group_name / $subgroup_name\",$confidence,${error['line_number']},${error['col_number']},\"" . $html_code . '"';
+			$this->csv_data .= $csv_line . "\n";
 
 
 		    // compose all <tr> rows
@@ -629,15 +639,16 @@ class HTMLByGuidelineRpt extends AccessibilityRpt {
 
 		return $html_success;
 	}
-        public function setUri($uri)
-        {
-                $this->uri = $uri;
-        }
+	public function setUri($uri)
+	{
+		$this->uri = $uri;
+	}
 
-        public function getCsvData()
-        {
-                $csv = "url,sequenceID,check_id,errorMsg,group,subgroup,standards,confidence,lineNum,columnNum,errorSourceCode\n" . $this->csv_data;
-                return $csv;
+	public function getCsvData()
+	{
+		$csv = "url,sequenceID,check_id,errorMsg,group,subgroup,standards,confidence,lineNum,columnNum,errorSourceCode\n" . $this->csv_data;
+		return $csv;
 	}
 }
+// vim: set filetype=php expandtab tabstop=2 shiftwidth=2 autoindent smartindent:
 ?>
